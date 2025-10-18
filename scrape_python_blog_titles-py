@@ -1,0 +1,25 @@
+import requests
+from bs4 import BeautifulSoup
+
+def scrape_python_blog_titles():
+    url = "https://www.python.org/blogs/"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find all blog post titles (they are inside <h3> tags with class 'widget-title' in this case)
+        # We'll check the actual page structure to target correctly
+        titles = soup.find_all('h3', class_='widget-title')
+
+        if titles:
+            print("Latest Python Blog Titles:")
+            for idx, title in enumerate(titles, 1):
+                print(f"{idx}. {title.text.strip()}")
+        else:
+            print("No titles found with the specified selector.")
+    else:
+        print(f"Failed to retrieve page, status code: {response.status_code}")
+
+if __name__ == "__main__":
+    scrape_python_blog_titles()
